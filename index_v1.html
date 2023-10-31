@@ -172,13 +172,13 @@
 </ul>
 <div class="text-center text-lg-start">
 <div id="product-listing">
-<div class="product" id="watch" data-product-name="apple watch 7" data-price="100">
+<div class="product">
 <img height="M-150" src="./assets/img/apple_watch_7.jpg" width="150px"/>
 <h4>apple watch 7</h4>
 <p>$100</p>
 <button class="btn-buy-now" onclick="addToCart('apple watch 7')">Add to cart</button>
 </div>
-<div class="product" id="watch 8" data-product-name="apple watch 8" data-price="150">
+<div class="product">
 <img height="M-150" src="./assets/img/apple_watch_8.jpg" width="150px"/>
 <h4>apple watch 8</h4>
 <p>$150</p>
@@ -205,13 +205,13 @@
             </p>
 <div class="text-center text-lg-start">
 <div id="product-listing">
-<div class="product" id="asus" data-product-name="Asus TUF f15" data-price="1100">
+<div class="product">
 <img height="M-150" src="./assets/img/tuf.jpg" width="150px"/>
 <h4>Asus TUF f15</h4>
 <p>$1100</p>
 <button class="btn-buy-now" onclick="addToCart('Asus TUF f15')">Add to cart</button>
 </div>
-<div class="product" id="predator" data-product-name="Predator" data-price="1550">
+<div class="product">
 <img height="M-150" src="./assets/img/predator.jpeg" width="150px"/>
 <h4>Predator</h4>
 <p>$1550</p>
@@ -235,13 +235,13 @@
 </ul>
 <div class="text-center text-lg-start">
 <div id="product-listing">
-<div class="product" id="iphone" data-product-name="iphone 14" data-price="1000">
+<div class="product">
 <img height="M-150" src="./assets/img/iphone_14.jpg" width="150px"/>
 <h4>iphone 14</h4>
 <p>$1000</p>
 <button class="btn-buy-now" onclick="addToCart('iphone 14')">Add to cart</button>
 </div>
-<div class="product" id="samsung" data-product-name="samsung ultra 22" data-price="1200">
+<div class="product">
 <img height="M-150" src="./assets/img/samsung.jpeg" width="150px"/>
 <h4>samsung ultra 22</h4>
 <p>$1200</p>
@@ -268,13 +268,13 @@
 </ul>
 <div class="text-center text-lg-start">
 <div id="product-listing">
-<div class="product" id="hoodie" data-product-name="hoodie" data-price="25">
+<div class="product">
 <img height="M-150" src="./assets/img/hoodie.jpg" width="150px"/>
 <h4>hoodie</h4>
 <p>$25</p>
 <button class="btn-buy-now" onclick="addToCart('hoodie')">Add to cart</button>
 </div>
-<div class="product" id="shoes" data-product-name="shoes" data-price="80">
+<div class="product">
 <img height="M-150" src="./assets/img/shoes.jpg" width="150px"/>
 <h4>shoes</h4>
 <p>$80</p>
@@ -303,7 +303,6 @@ function addToCart(productName, quantity) {
 <ul id="cart-list" style="display: none;">
 </ul>
 <!-- <p>No items in cart yet.</p> -->
-<div id="cart-total">Total: $0</div>
 <button class="checkout-button" onclick="checkout()">Checkout</button>
 </div>
 </div>
@@ -451,7 +450,7 @@ function addToCart(productName, quantity) {
 <div class="col-lg-4 col-md-6 footer-newsletter">
 <h4>Our Newsletter</h4>
 <p>Subscribe to our Newsletter to get to known about our latest discount and offers</p>
-<form action="javascript:void(0)" method="post" onsubmit="return  validateEmail();">
+<form action="javascript:showSubscribePopup()" method="post" onsubmit="return  validateEmail();">
 <input name="email" id="subEmail" data-rule="email" placeholder="Your Email" type="email"/><input type="submit" value="Subscribe" onclick="toggleSubscribeButton()"/>
 </form>
 </div>
@@ -468,7 +467,11 @@ function addToCart(productName, quantity) {
 </div>
 </div>
 </footer>
-
+<script>
+function showSubscribePopup() {
+    alert("You are subscribed!");
+}
+</script>
 
 <a class="back-to-top" href="#"><i class="icofont-simple-up"></i></a>
 <div id="preloader"></div>

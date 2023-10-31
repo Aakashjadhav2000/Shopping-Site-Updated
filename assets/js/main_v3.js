@@ -208,24 +208,15 @@ function toggleSearchBar() {
 }
 
 var cart = {};
-var totalPrice = 0;
-
-function updateTotalPrice() {
-  var cartTotalElem = document.getElementById("cart-total");
-  cartTotalElem.innerText = "Total: $" + totalPrice.toFixed(2);  // Format to 2 decimal places
-}
-
 function addToCart(productName) {
   var cartList = document.getElementById("cart-list");
-  var productElem = document.querySelector('.product[data-product-name="' + productName + '"]');
-  var productPrice = parseFloat(productElem.getAttribute('data-price'));
   
   if (cart[productName]) {
+      // If the product is already in the cart, update its quantity
       cart[productName].quantity++;
-      totalPrice += productPrice;
-      // Update the text while keeping the delete button
-      cart[productName].listItem.firstChild.nodeValue = productName + " x" + cart[productName].quantity + " - $" + (cart[productName].price * cart[productName].quantity) + " ";
+      cart[productName].listItem.innerText = productName + " x" + cart[productName].quantity;
   } else {
+      // Create a new list item for the cart
       var listItem = document.createElement("li");
       
       // Add a delete button to the list item
@@ -235,22 +226,23 @@ function addToCart(productName) {
       deleteBtn.onclick = function() {
           removeFromCart(productName);
       };
-      
-      listItem.appendChild(document.createTextNode(productName + " x1 - $" + productPrice + " "));
       listItem.appendChild(deleteBtn);
       
+      // Append the list item to the cart list
       cartList.appendChild(listItem);
+      
+      // If the product is not in the cart, add it with a quantity of 1
       cart[productName] = {
           quantity: 1,
-          price: productPrice,
           listItem: listItem
       };
-      totalPrice += productPrice;
+      listItem.innerText = productName + " x1";
   }
-  
-  cartList.style.display = "block";
+
+  cartList.style.display = "block";  // Show the cart list
+
+  // Update the mock cart count
   updateCartCount(1);
-  updateTotalPrice();
 }
 
 function updateCartDisplay() {
@@ -285,23 +277,24 @@ function updateCartDisplay() {
 }
 
 function removeFromCart(productName) {
-  var productPrice = cart[productName].price;
+  var cartList = document.getElementById("cart-list");
   
   cart[productName].quantity--;
-  totalPrice -= productPrice;
-
-  // If the quantity becomes zero, remove the product entirely
   if (cart[productName].quantity === 0) {
-      var cartList = document.getElementById("cart-list");
+      // Remove the list item from the cart if the quantity reaches zero
       cartList.removeChild(cart[productName].listItem);
       delete cart[productName];
   } else {
-      // Otherwise, just update the displayed quantity
-      cart[productName].listItem.firstChild.nodeValue = productName + " x" + cart[productName].quantity + " - $" + (cart[productName].price * cart[productName].quantity) + " ";
+      cart[productName].listItem.innerText = productName + " x" + cart[productName].quantity;
   }
 
+  // Hide the cart list if it's empty
+  if (!cartList.hasChildNodes()) {
+      cartList.style.display = "none";
+  }
+
+  // Update the mock cart count
   updateCartCount(-1);
-  updateTotalPrice();
 }
 
 function updateCartCount(change) {
@@ -399,9 +392,7 @@ function toggleSubscribeButton() {
     var button = document.querySelector("input[type='submit']");
     if (button.value === "Subscribe") {
         button.value = "Unsubscribe";
-        alert("You are subscribed!");
     } else {
         button.value = "Subscribe";
-        alert("You are Unsubscribed!");
     }
 }

@@ -92,7 +92,6 @@
   // Navigation active state on scroll
   var nav_sections = $('section');
   var main_nav = $('.nav-menu, .mobile-nav');
-  
 
   $(window).on('scroll', function() {
     var cur_pos = $(this).scrollTop() + 200;
@@ -181,14 +180,13 @@
 })(jQuery);
 
 function searchProduct() {
-  var searchTerm = document.getElementById("new-search-input").value.toLowerCase().replace(/\s+/g, '_');
-  var productElement = document.getElementById(searchTerm);
-  
-  if (productElement) {
-      window.location.href = "#" + searchTerm;
-  } else {
-      alert("Product not found!");
-  }
+    var searchTerm = document.getElementById("new-search-input").value;
+    if (searchTerm) {
+
+        alert("Searching for: " + searchTerm);
+    } else {
+        alert("Please enter a product to search for.");
+    }
 }
 
 function toggleSearchBar() {
@@ -207,107 +205,57 @@ function toggleSearchBar() {
   }
 }
 
-var cart = {};
-var totalPrice = 0;
+function addToCart(productName) {
 
-function updateTotalPrice() {
-  var cartTotalElem = document.getElementById("cart-total");
-  cartTotalElem.innerText = "Total: $" + totalPrice.toFixed(2);  // Format to 2 decimal places
+    alert(productName + " has been added to your cart!");
+
+    // Update the mock cart count
+    var cartCountElem = document.getElementById("count");
+    var currentCount = parseInt(cartCountElem.innerText);
+    cartCountElem.innerText = currentCount + 1;
 }
 
 function addToCart(productName) {
-  var cartList = document.getElementById("cart-list");
-  var productElem = document.querySelector('.product[data-product-name="' + productName + '"]');
-  var productPrice = parseFloat(productElem.getAttribute('data-price'));
-  
-  if (cart[productName]) {
-      cart[productName].quantity++;
-      totalPrice += productPrice;
-      // Update the text while keeping the delete button
-      cart[productName].listItem.firstChild.nodeValue = productName + " x" + cart[productName].quantity + " - $" + (cart[productName].price * cart[productName].quantity) + " ";
-  } else {
-      var listItem = document.createElement("li");
-      
-      // Add a delete button to the list item
-      var deleteBtn = document.createElement("button");
-      deleteBtn.className = "btn-buy-now btn-delete";
-      deleteBtn.innerText = "Delete";
-      deleteBtn.onclick = function() {
-          removeFromCart(productName);
-      };
-      
-      listItem.appendChild(document.createTextNode(productName + " x1 - $" + productPrice + " "));
-      listItem.appendChild(deleteBtn);
-      
-      cartList.appendChild(listItem);
-      cart[productName] = {
-          quantity: 1,
-          price: productPrice,
-          listItem: listItem
-      };
-      totalPrice += productPrice;
-  }
-  
-  cartList.style.display = "block";
-  updateCartCount(1);
-  updateTotalPrice();
+    // Create a new list item for the cart
+    var listItem = document.createElement("li");
+    listItem.innerText = productName;
+    
+    // Add a delete button to the list item
+    var deleteBtn = document.createElement("button");
+    deleteBtn.className = "btn-buy-now btn-delete";
+    deleteBtn.innerText = "Delete";
+    deleteBtn.onclick = function() {
+        removeFromCart(listItem);
+    };
+    listItem.appendChild(deleteBtn);
+
+    // Append the list item to the cart list
+    var cartList = document.getElementById("cart-list");
+    cartList.appendChild(listItem);
+    cartList.style.display = "block";  // Show the cart list
+
+    // Update the mock cart count
+    updateCartCount(1);
 }
 
-function updateCartDisplay() {
-  // Get the cart display element (assuming an element with ID 'cart-list' exists)
-  var cartList = document.getElementById("cart-list");
-  
-  // Reset the cart display content
-  cartList.innerHTML = "";
-  
-  // Loop through the cart object and display each product and its quantity
-  for (var product in cart) {
-      var listItem = document.createElement("li");
-      listItem.innerText = product + " x" + cart[product];
-      
-      // Add a delete button to the list item
-      var deleteBtn = document.createElement("button");
-      deleteBtn.className = "btn-buy-now btn-delete";
-      deleteBtn.innerText = "Delete";
+function removeFromCart(listItem) {
+    // Remove the list item from the cart
+    var cartList = document.getElementById("cart-list");
+    cartList.removeChild(listItem);
 
-      // Use an IIFE to correctly handle the product variable inside the loop
-      (function(productName) {
-          deleteBtn.onclick = function() {
-              removeFromCart(productName);
-          };
-      })(product);
+    // Hide the cart list if it's empty
+    if (!cartList.hasChildNodes()) {
+        cartList.style.display = "none";
+    }
 
-      listItem.appendChild(deleteBtn);
-
-      // Append the list item to the cart list
-      cartList.appendChild(listItem);
-  }
-}
-
-function removeFromCart(productName) {
-  var productPrice = cart[productName].price;
-  
-  cart[productName].quantity--;
-  totalPrice -= productPrice;
-
-  // If the quantity becomes zero, remove the product entirely
-  if (cart[productName].quantity === 0) {
-      var cartList = document.getElementById("cart-list");
-      cartList.removeChild(cart[productName].listItem);
-      delete cart[productName];
-  } else {
-      // Otherwise, just update the displayed quantity
-      cart[productName].listItem.firstChild.nodeValue = productName + " x" + cart[productName].quantity + " - $" + (cart[productName].price * cart[productName].quantity) + " ";
-  }
-
-  updateCartCount(-1);
-  updateTotalPrice();
+    // Update the mock cart count
+    updateCartCount(-1);
 }
 
 function updateCartCount(change) {
-  var cartCountElem = document.getElementById("count");
-  var currentCount = parseInt(cartCountElem.innerText);
-  cartCountElem.innerText = currentCount + change;
+    var cartCountElem = document.getElementById("count");
+    var currentCount = parseInt(cartCountElem.innerText);
+    cartCountElem.innerText = currentCount + change;
 }
 
 function checkout() {
@@ -399,9 +347,7 @@ function toggleSubscribeButton() {
     var button = document.querySelector("input[type='submit']");
     if (button.value === "Subscribe") {
         button.value = "Unsubscribe";
-        alert("You are subscribed!");
     } else {
         button.value = "Subscribe";
-        alert("You are Unsubscribed!");
     }
 }
